@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using StarChart.Data;
 using StarChart.Models;
@@ -34,7 +35,7 @@ namespace StarChart.Controllers
         [HttpGet("{id:int}", Name = "GetById")]
         public IActionResult GetById(int id)
         {
-            CelestialObject celestianObject = new CelestialObject { Id = 12345, Name = "abcdef" };
+            CelestialObject celestianObject = _context.CelestialObjects.Find(id);
             if (celestianObject.Id != id)
             {
                 return NotFound();
@@ -53,7 +54,7 @@ namespace StarChart.Controllers
         [HttpGet("{name}", Name = "GetByName")]
         public IActionResult GetByName(string name)
         {
-            CelestialObject celestianObject = new CelestialObject { Name = "name45896" };
+            CelestialObject celestianObject = _context.CelestialObjects.Find(name);
             if (celestianObject.Name != name)
             {
                 return NotFound();
@@ -72,15 +73,15 @@ namespace StarChart.Controllers
         [HttpGet(Name = "GetAll")]
         public IActionResult GetAll()
         {
-            CelestialObject[] celestianObjects = new CelestialObject[2];
+            CelestialObject[] celestianObjects = _context.CelestialObjects.ToArray();
 
-            celestianObjects[0] = new CelestialObject { Id = 1, Name = "1" };
+            celestianObjects[0] = new CelestialObject { Id = 1, Name = "Sun" };
             celestianObjects[0].Satellites = new System.Collections.Generic.List<CelestialObject>()
             {
                   new CelestialObject() {Id =11, Name = "1.1"},
                   new CelestialObject() {Id =12, Name = "1.2"}
             };
-            celestianObjects[1] = new CelestialObject { Id = 2, Name = "2" };
+            celestianObjects[1] = new CelestialObject { Id = 2, Name = "Earth" };
             celestianObjects[1].Satellites = new System.Collections.Generic.List<CelestialObject>()
             {
                   new CelestialObject() {Id =21, Name = "2.1"},
