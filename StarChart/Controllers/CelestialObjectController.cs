@@ -8,7 +8,7 @@ namespace StarChart.Controllers
     /// </summary>
     [Route("")]
     [ApiController]
-    public class CelestialObjectController : Controller
+    public class CelestialObjectController : ControllerBase
     {
         /// <summary>
         /// ApplicationDbContext field
@@ -24,13 +24,5 @@ namespace StarChart.Controllers
             _context = context;
         }
 
-        /// <summary>
-        /// Index Action
-        /// </summary>
-        /// <returns>The IActionResult View</returns>
-        public IActionResult Index()
-        {
-            return View();
-        }
     }
 }
