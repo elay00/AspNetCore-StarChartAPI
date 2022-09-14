@@ -37,7 +37,7 @@ namespace StarChart.Controllers
             CelestialObject celestianObject = new CelestialObject { Id = 12345, Name="abcdef" };
             if (celestianObject.Id != id)
             {
-                return NotFound("The object is not found with the provided Id");
+                return NotFound();
             }
             else
             {
@@ -52,7 +52,7 @@ namespace StarChart.Controllers
             CelestialObject celestianObject = new CelestialObject { Name = "name45896" };
             if (celestianObject.Name != name)
             {
-                return NotFound("The object is not found with the provided Name");
+                return NotFound();
             }
             else
             {
@@ -64,7 +64,7 @@ namespace StarChart.Controllers
         [HttpGet(Name = "GetAll")]
         public IActionResult GetAll()
         {
-            CelestialObject[] celestianObjects = new CelestialObject[1];
+            CelestialObject[] celestianObjects = new CelestialObject[2];
 
             celestianObjects[0] = new CelestialObject { Id = 1, Name = "1" };
             celestianObjects[0].Satellites = new System.Collections.Generic.List<CelestialObject>()
