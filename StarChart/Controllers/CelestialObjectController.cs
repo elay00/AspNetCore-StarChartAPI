@@ -44,6 +44,11 @@ namespace StarChart.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get elements by name
+        /// </summary>
+        /// <param name="name">the name element</param>
+        /// <returns>the operation result</returns>
         [HttpGet("{name}")]
         public IActionResult GetByName(string name)
         {
@@ -60,6 +65,10 @@ namespace StarChart.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get all elements
+        /// </summary>
+        /// <returns>the operation result</returns>
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -69,6 +78,81 @@ namespace StarChart.Controllers
                 item.Satellites = _context.CelestialObjects.Where(e => e.OrbitedObjectId == item.OrbitedObjectId).ToList();
             }
             return Ok(result);
+        }
+
+
+        /// <summary>
+        /// Create an element
+        /// </summary>
+        /// <param name="celestialObject">the element to create</param>
+        /// <returns>The creation result</returns>
+        [HttpPost]
+        public IActionResult Create([FromBody] CelestialObject celestialObject)
+        {
+            _context.CelestialObjects.Add(celestialObject);
+            _context.SaveChanges();
+            return CreatedAtRoute("GetById", new { id = celestialObject.Id }, celestialObject);
+
+        }
+        /// <summary>
+        /// Update the element with id specified
+        /// </summary>
+        /// <param name="id">the specified id</param>
+        /// <param name="celestialObject">the updated data</param>
+        /// <returns>the update result</returns>
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, CelestialObject celestialObject)
+        {
+            var existingObject = _context.CelestialObjects.Find(id);
+            if (existingObject == null)
+            {
+                return NotFound();
+            }
+            existingObject.Name = celestialObject.Name;
+            existingObject.OrbitalPeriod = celestialObject.OrbitalPeriod;
+            existingObject.OrbitedObjectId = celestialObject.OrbitedObjectId;
+            _context.CelestialObjects.Update(existingObject);
+            _context.SaveChanges();
+            return NoContent();
+        }
+
+
+        /// <summary>
+        /// Rename object with id and name
+        /// </summary>
+        /// <param name="id">the element id</param>
+        /// <param name="name">the element name</param>
+        /// <returns>the rename result</returns>
+        [HttpPatch("{id}/{name}")]
+        public IActionResult RenameObject(int id, string name)
+        {
+            var existingObject = _context.CelestialObjects.Find(id);
+            if (existingObject == null)
+            {
+                return NotFound();
+            }
+            existingObject.Name = name;
+            _context.CelestialObjects.Update(existingObject);
+            _context.SaveChanges();
+            return NoContent();
+        }
+
+        /// <summary>
+        /// The delete action
+        /// </summary>
+        /// <param name="id">the element id to delete</param>
+        /// <returns>the result of the delete operation</returns>
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var allObjects = _context.CelestialObjects.Where(e => e.Id == id || e.OrbitedObjectId == id);
+            if (!allObjects.Any())
+            {
+                return NotFound();
+            }
+            _context.CelestialObjects.RemoveRange(allObjects);
+            _context.SaveChanges();
+            return NoContent();
         }
     }
 }
