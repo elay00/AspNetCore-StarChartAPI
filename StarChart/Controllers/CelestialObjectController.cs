@@ -34,7 +34,7 @@ namespace StarChart.Controllers
         [HttpGet("{id:int}", Name = "GetById")]
         public IActionResult GetById(int id)
         {
-            CelestialObject celestianObject = null;
+            CelestialObject celestianObject = new CelestialObject { Id = 12345, Name="abcdef" };
             if (celestianObject.Id != id)
             {
                 return NotFound("The object is not found with the provided Id");
@@ -42,8 +42,43 @@ namespace StarChart.Controllers
             else
             {
                 celestianObject.Satellites = new System.Collections.Generic.List<CelestialObject> { celestianObject };
-                return Ok();
+                return Ok(celestianObject);
             }
+        }
+
+        [HttpGet("{name}", Name = "GetByName")]
+        public IActionResult GetByName(string name)
+        {
+            CelestialObject celestianObject = new CelestialObject { Name = "name45896" };
+            if (celestianObject.Name != name)
+            {
+                return NotFound("The object is not found with the provided Name");
+            }
+            else
+            {
+                celestianObject.Satellites = new System.Collections.Generic.List<CelestialObject> { celestianObject };
+                return Ok(celestianObject);
+            }
+        }
+
+        [HttpGet(Name = "GetAll")]
+        public IActionResult GetAll()
+        {
+            CelestialObject[] celestianObjects = new CelestialObject[1];
+
+            celestianObjects[0] = new CelestialObject { Id = 1, Name = "1" };
+            celestianObjects[0].Satellites = new System.Collections.Generic.List<CelestialObject>()
+            {
+                  new CelestialObject() {Id =11, Name = "1.1"},
+                  new CelestialObject() {Id =12, Name = "1.2"}
+            };
+            celestianObjects[1] = new CelestialObject { Id=2, Name = "2" };
+            celestianObjects[1].Satellites = new System.Collections.Generic.List<CelestialObject>()
+            {
+                  new CelestialObject() {Id =21, Name = "2.1"},
+                  new CelestialObject() {Id =22, Name = "2.2"}
+            };
+            return Ok(celestianObjects);
         }
     }
 }
